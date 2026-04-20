@@ -20,7 +20,7 @@ Built as a pure **HTML/CSS/JS** project with zero dependencies, fully responsive
 
 ## 🚀 Live Demo
 
-👉 **[cinematch.yourusername.github.io](https://agusadhitama.github.io/cinematch)**
+👉 **[cinematch.agusadhitama.github.io](https://agusadhitama.github.io/cinematch)**
 
 ---
 
