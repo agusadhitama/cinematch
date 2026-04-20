@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CineMatch - What Should I Watch?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --card: #1a1a26;
+      --border: #2a2a3d;
+      --accent: #e8c547;
+      --accent2: #ff6b6b;
+      --accent3: #6be5ff;
+      --text: #f0eee8;
+      --muted: #7a7a99;
+      --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: var(--grain);
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ── NOISE BG ── */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.12;
+      animation: drift 20s ease-in-out infinite;
+    }
+    .orb-1 { width: 600px; height: 600px; background: var(--accent); top: -200px; left: -100px; animation-delay: 0s; }
+    .orb-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -150px; right: -100px; animation-delay: -7s; }
+    .orb-3 { width: 400px; height: 400px; background: var(--accent3); top: 40%; left: 40%; animation-delay: -14s; }
+
+    @keyframes drift {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(40px,-30px) scale(1.05); }
+      66% { transform: translate(-20px,40px) scale(0.95); }
+    }
+
+    /* ── LAYOUT ── */
+    .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── HEADER ── */
+    header {
+      padding: 60px 20px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .logo-tag {
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(232,197,71,0.3);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      background: rgba(232,197,71,0.05);
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 12vw, 110px);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--accent) 50%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.3px;
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── FORM ── */
+    .form-section {
+      position: relative;
+      z-index: 1;
+      padding: 0 20px 60px;
+    }
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .form-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.6;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .field-group { margin-bottom: 24px; }
+
+    /* Mood Pills */
+    .mood-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .mood-pill {
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .mood-pill:hover { border-color: var(--accent); color: var(--accent); }
+    .mood-pill.active {
+      background: rgba(232,197,71,0.12);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Genre Pills */
+    .genre-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .genre-pill {
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 30px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 13px;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .genre-pill:hover { border-color: var(--accent3); color: var(--accent3); }
+    .genre-pill.active {
+      background: rgba(107,229,255,0.1);
+      border-color: var(--accent3);
+      color: var(--accent3);
+    }
+
+    /* Type Toggle */
+    .type-toggle {
+      display: flex;
+      gap: 8px;
+    }
+    .type-btn {
+      flex: 1;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      text-align: center;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .type-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+    .type-btn.active {
+      background: rgba(255,107,107,0.1);
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    /* CTA Button */
+    .cta-btn {
+      width: 100%;
+      margin-top: 8px;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #c9a227);
+      color: #0a0a0f;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(232,197,71,0.3); }
+    .cta-btn:active { transform: translateY(0); }
+    .cta-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .cta-btn .btn-shimmer {
+      position: absolute;
+      top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer { to { left: 150%; } }
+
+    /* ── LOADER ── */
+    #loader {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .loader-clapboard {
+      font-size: 48px;
+      animation: clap 0.6s ease-in-out infinite alternate;
+      display: block;
+      margin-bottom: 16px;
+    }
+    @keyframes clap { from { transform: rotate(-10deg); } to { transform: rotate(10deg); } }
+    .loader-text { color: var(--muted); font-size: 14px; letter-spacing: 1px; }
+    .loader-dots::after {
+      content: '';
+      animation: dots 1.5s steps(3, end) infinite;
+    }
+    @keyframes dots {
+      0%  { content: ''; }
+      33% { content: '.'; }
+      66% { content: '..'; }
+      100%{ content: '...'; }
+    }
+
+    /* ── RESULTS ── */
+    #results {
+      display: none;
+      position: relative;
+      z-index: 1;
+      padding: 0 20px 40px;
+    }
+    .results-header {
+      max-width: 960px;
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .results-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      letter-spacing: 2px;
+      color: var(--text);
+    }
+    .results-title span { color: var(--accent); }
+    .reset-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .reset-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+    .movie-grid {
+      max-width: 960px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .movie-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      animation: cardIn 0.5s ease backwards;
+      cursor: default;
+    }
+    .movie-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(232,197,71,0.3);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-poster {
+      width: 100%;
+      aspect-ratio: 2/3;
+      object-fit: cover;
+      display: block;
+      background: var(--surface);
+    }
+    .card-poster-placeholder {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: linear-gradient(135deg, var(--surface), var(--card));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+    }
+
+    .card-body { padding: 18px; }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .card-year {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .card-type {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .type-movie { background: rgba(255,107,107,0.15); color: var(--accent2); }
+    .type-series { background: rgba(107,229,255,0.15); color: var(--accent3); }
+
+    .card-rating {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--accent);
+    }
+
+    .card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .card-genres {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .card-genre-tag {
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .card-overview {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-why {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: rgba(232,197,71,0.06);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+    }
+    .card-why-label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .card-why-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(240,238,232,0.7);
+      font-style: italic;
+    }
+
+    /* ── ERROR ── */
+    #error-msg {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--accent2);
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px 20px 60px;
+      border-top: 1px solid var(--border);
+      margin-top: 20px;
+    }
+    .footer-credit {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+    .footer-credit strong { color: var(--accent); font-weight: 500; }
+    .footer-poweredby {
+      margin-top: 6px;
+      font-size: 11px;
+      color: rgba(122,122,153,0.5);
+      letter-spacing: 0.5px;
+    }
+    .tmdb-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--accent3);
+      font-weight: 500;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 600px) {
+      header { padding: 40px 20px 28px; }
+      .form-card { padding: 24px 20px; }
+      .movie-grid { grid-template-columns: 1fr; }
+      .type-toggle { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-tag">🎬 CineMatch</div>
+  <h1>WHAT TO<br>WATCH?</h1>
+  <p class="subtitle">Tell us your mood and genre, We'll find the perfect movie or series for tonight.</p>
+</header>
+
+<!-- FORM -->
+<section class="form-section">
+  <div class="form-card">
+
+    <div class="field-group">
+      <span class="field-label">What's your mood right now?</span>
+      <div class="mood-grid" id="moodGrid">
+        <div class="mood-pill" data-value="happy">😄 Happy</div>
+        <div class="mood-pill" data-value="sad">😢 Sad</div>
+        <div class="mood-pill" data-value="excited">⚡ Excited</div>
+        <div class="mood-pill" data-value="relaxed">😌 Relaxed</div>
+        <div class="mood-pill" data-value="bored">😐 Bored</div>
+        <div class="mood-pill" data-value="romantic">💕 Romantic</div>
+        <div class="mood-pill" data-value="anxious">😰 Anxious</div>
+        <div class="mood-pill" data-value="adventurous">🌍 Adventurous</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <span class="field-label">Preferred Genres (pick multiple)</span>
+      <div class="genre-grid" id="genreGrid">
+        <div class="genre-pill" data-value="Action">💥 Action</div>
+        <div class="genre-pill" data-value="Comedy">😂 Comedy</div>
+        <div class="genre-pill" data-value="Drama">🎭 Drama</div>
+        <div class="genre-pill" data-value="Horror">👻 Horror</div>
+        <div class="genre-pill" data-value="Sci-Fi">🚀 Sci-Fi</div>
+        <div class="genre-pill" data-value="Romance">❤️ Romance</div>
+        <div class="genre-pill" data-value="Thriller">🔪 Thriller</div>
+        <div class="genre-pill" data-value="Animation">🎨 Animation</div>
+        <div class="genre-pill" data-value="Documentary">🎤 Documentary</div>
+        <div class="genre-pill" data-value="Fantasy">🧙 Fantasy</div>
+        <div class="genre-pill" data-value="Mystery">🔍 Mystery</div>
+        <div class="genre-pill" data-value="Crime">🕵️ Crime</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <span class="field-label">Movie or Series?</span>
+      <div class="type-toggle" id="typeToggle">
+        <div class="type-btn active" data-value="both">🎬 Both</div>
+        <div class="type-btn" data-value="movie">🎥 Movie Only</div>
+        <div class="type-btn" data-value="series">📺 Series Only</div>
+      </div>
+    </div>
+
+    <button class="cta-btn" id="findBtn" onclick="findRecommendations()">
+      <span class="btn-shimmer"></span>
+      FIND MY WATCH TONIGHT
+    </button>
+  </div>
+</section>
+
+<!-- LOADER -->
+<div id="loader">
+  <span class="loader-clapboard">🎬</span>
+  <p class="loader-text">Curating your perfect watchlist<span class="loader-dots"></span></p>
+</div>
+
+<!-- ERROR -->
+<div id="error-msg"></div>
+
+<!-- RESULTS -->
+<section id="results">
+  <div class="results-header">
+    <div class="results-title">YOUR <span>PICKS</span> TONIGHT</div>
+    <button class="reset-btn" onclick="resetForm()">← Try Again</button>
+  </div>
+  <div class="movie-grid" id="movieGrid"></div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-credit">Made with ❤️ by <strong>Agus Satria Adhitama</strong></p>
+  <p class="footer-poweredby">Powered by <span class="tmdb-logo">⚡ TMDB API</span> &amp; Claude AI</p>
+</footer>
+
+<script>
+  const TMDB_KEY = '0acec303cafc671ca0ff3dd93f500468'; // Replace with your TMDB API key
+
+  let selectedMood = '';
+  let selectedGenres = [];
+  let selectedType = 'both';
+
+  // Mood → Genre ID map (TMDB genre IDs)
+  const moodGenreMap = {
+    happy:       [35, 16, 10751],   // Comedy, Animation, Family
+    sad:         [18, 10749],        // Drama, Romance
+    excited:     [28, 12, 878],      // Action, Adventure, Sci-Fi
+    relaxed:     [99, 36, 10402],    // Documentary, History, Music
+    bored:       [53, 9648, 80],     // Thriller, Mystery, Crime
+    romantic:    [10749, 35],        // Romance, Comedy
+    anxious:     [27, 53],           // Horror, Thriller
+    adventurous: [12, 14, 878],      // Adventure, Fantasy, Sci-Fi
+  };
+
+  const genreIdMap = {
+    'Action': 28, 'Comedy': 35, 'Drama': 18, 'Horror': 27,
+    'Sci-Fi': 878, 'Romance': 10749, 'Thriller': 53, 'Animation': 16,
+    'Documentary': 99, 'Fantasy': 14, 'Mystery': 9648, 'Crime': 80,
+  };
+
+  const moodReasons = {
+    happy: 'Matches your upbeat, feel-good energy right now.',
+    sad: 'A meaningful story to channel your emotions.',
+    excited: 'High-energy pick to match your vibe.',
+    relaxed: 'Perfect for a chill, no-stress evening.',
+    bored: 'Gripping enough to pull you off the edge of boredom.',
+    romantic: 'Sets the right mood for a romantic night.',
+    anxious: 'Lets you redirect that nervous energy into the screen.',
+    adventurous: 'Feeds your wanderlust from the couch.',
+  };
+
+  // Pill interactions
+  document.querySelectorAll('.mood-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.mood-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      selectedMood = pill.dataset.value;
+    });
+  });
+
+  document.querySelectorAll('.genre-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      pill.classList.toggle('active');
+      const v = pill.dataset.value;
+      if (pill.classList.contains('active')) {
+        selectedGenres.push(v);
+      } else {
+        selectedGenres = selectedGenres.filter(g => g !== v);
+      }
+    });
+  });
+
+  document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedType = btn.dataset.value;
+    });
+  });
+
+  async function findRecommendations() {
+    if (!selectedMood) {
+      alert('Please select your mood first!');
+      return;
+    }
+
+    const btn = document.getElementById('findBtn');
+    btn.disabled = true;
+
+    document.querySelector('.form-section').style.display = 'none';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('loader').style.display = 'block';
+
+    try {
+      // Build genre IDs
+      let genreIds = [];
+      if (selectedGenres.length > 0) {
+        genreIds = selectedGenres.map(g => genreIdMap[g]).filter(Boolean);
+      } else {
+        genreIds = moodGenreMap[selectedMood] || [];
+      }
+      const genreStr = genreIds.join(',');
+
+      const types = selectedType === 'both' ? ['movie', 'tv'] :
+                    selectedType === 'movie' ? ['movie'] : ['tv'];
+
+      let allResults = [];
+
+      for (const type of types) {
+        const url = `https://api.themoviedb.org/3/discover/${type}?api_key=${TMDB_KEY}&with_genres=${genreStr}&sort_by=vote_average.desc&vote_count.gte=200&page=1&language=en-US`;
+        const res = await fetch(url);
+        const data = await res.json();
+        if (data.results) {
+          const tagged = data.results.slice(0, 6).map(item => ({ ...item, mediaType: type }));
+          allResults = allResults.concat(tagged);
+        }
+      }
+
+      // Shuffle + pick top 6
+      allResults = allResults.sort(() => Math.random() - 0.5).slice(0, 6);
+
+      if (allResults.length === 0) throw new Error('No results found');
+
+      renderResults(allResults);
+    } catch (e) {
+      document.getElementById('loader').style.display = 'none';
+      const errEl = document.getElementById('error-msg');
+      errEl.style.display = 'block';
+      errEl.innerHTML = `
+        <div style="font-size:36px;margin-bottom:12px">😵</div>
+        <p style="margin-bottom:8px">Couldn't load recommendations.</p>
+        <p style="font-size:12px;opacity:0.6">Make sure your TMDB API key is set in the code, or check your internet connection.</p>
+        <button onclick="resetForm()" style="margin-top:16px;background:transparent;border:1px solid #ff6b6b;color:#ff6b6b;padding:10px 20px;border-radius:20px;font-family:'DM Sans',sans-serif;cursor:pointer;font-size:13px;">← Try Again</button>
+      `;
+      btn.disabled = false;
+    }
+  }
+
+  function renderResults(items) {
+    document.getElementById('loader').style.display = 'none';
+
+    const grid = document.getElementById('movieGrid');
+    grid.innerHTML = '';
+
+    const whyText = moodReasons[selectedMood] || 'A great pick for tonight.';
+
+    items.forEach((item, i) => {
+      const title = item.title || item.name || 'Unknown';
+      const year = (item.release_date || item.first_air_date || '').slice(0, 4);
+      const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
+      const overview = item.overview || 'No description available.';
+      const poster = item.poster_path
+        ? `<img class="card-poster" src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${title}" loading="lazy" />`
+        : `<div class="card-poster-placeholder">🎬</div>`;
+
+      const typeLabel = item.mediaType === 'movie'
+        ? '<span class="card-type type-movie">Movie</span>'
+        : '<span class="card-type type-series">Series</span>';
+
+      const genreNames = (item.genre_ids || []).map(id => {
+        return Object.entries(genreIdMap).find(([,v]) => v === id)?.[0];
+      }).filter(Boolean).slice(0, 3);
+
+      const genreTags = genreNames.map(g => `<span class="card-genre-tag">${g}</span>`).join('');
+
+      const card = document.createElement('div');
+      card.className = 'movie-card';
+      card.style.animationDelay = `${i * 0.08}s`;
+      card.innerHTML = `
+        ${poster}
+        <div class="card-body">
+          <div class="card-meta">
+            ${typeLabel}
+            <span class="card-year">${year}</span>
+            <div class="card-rating">⭐ ${rating}</div>
+          </div>
+          <div class="card-title">${title}</div>
+          <div class="card-genres">${genreTags}</div>
+          <p class="card-overview">${overview}</p>
+          <div class="card-why">
+            <div class="card-why-label">Why tonight?</div>
+            <div class="card-why-text">${whyText}</div>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+
+    document.getElementById('results').style.display = 'block';
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetForm() {
+    document.querySelector('.form-section').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('error-msg').style.display = 'none';
+    document.getElementById('loader').style.display = 'none';
+    document.getElementById('findBtn').disabled = false;
+    document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
