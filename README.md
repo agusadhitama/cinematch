@@ -20,19 +20,19 @@ Built as a pure **HTML/CSS/JS** project with zero dependencies, fully responsive
 
 ## 🚀 Live Demo
 
-👉 **[cinematch.agusadhitama.github.io](https://agusadhitama.github.io/cinematch)**
+👉🏽 **[cinematch.agusadhitama.github.io](https://agusadhitama.github.io/cinematch)**
 
 ---
 
 ## 📸 Features
 
-- 🎭 **Mood selector** 8 mood options that auto-map to relevant genres
-- 🎬 **Genre filter** 12 genres to mix and match
-- 📺 **Type toggle** choose Movie only, Series only, or Both
-- ⭐ **Rich cards** poster, rating, year, genre tags & overview
-- 💡 **"Why Tonight?"** personalized reason per recommendation
-- 🌑 **Dark cinematic UI** animated background, grain texture, smooth transitions
-- 📱 **Fully responsive** works great on PC and mobile
+- **Mood selector** 8 mood options that auto-map to relevant genres
+- **Genre filter** 12 genres to mix and match
+- **Type toggle** choose Movie only, Series only, or Both
+- **Rich cards** poster, rating, year, genre tags & overview
+- **"Why Tonight?"** personalized reason per recommendation
+- **Dark cinematic UI** animated background, grain texture, smooth transitions
+- **Fully responsive** works great on PC and mobile
 
 ---
 
@@ -118,14 +118,14 @@ cinematch/
 
 | Mood | Mapped Genres |
 |------|--------------|
-| 😄 Happy | Comedy, Animation, Family |
-| 😢 Sad | Drama, Romance |
-| ⚡ Excited | Action, Adventure, Sci-Fi |
-| 😌 Relaxed | Documentary, History, Music |
-| 😐 Bored | Thriller, Mystery, Crime |
-| 💕 Romantic | Romance, Comedy |
-| 😰 Anxious | Horror, Thriller |
-| 🌍 Adventurous | Adventure, Fantasy, Sci-Fi |
+| Happy | Comedy, Animation, Family |
+| Sad | Drama, Romance |
+| Excited | Action, Adventure, Sci-Fi |
+| Relaxed | Documentary, History, Music |
+| Bored | Thriller, Mystery, Crime |
+| Romantic | Romance, Comedy |
+| Anxious | Horror, Thriller |
+| Adventurous | Adventure, Fantasy, Sci-Fi |
 
 ---
 
