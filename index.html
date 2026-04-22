@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CineMatch - What Should I Watch?</title>
+  <title>CineMatch - Mau Nonton Apa Malam Ini?</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -509,8 +509,8 @@
 <!-- HEADER -->
 <header>
   <div class="logo-tag">🎬 CineMatch</div>
-  <h1>WHAT TO<br>WATCH?</h1>
-  <p class="subtitle">Tell us your mood and genre, We'll find the perfect movie or series for tonight.</p>
+  <h1>MAU NONTON<br>APA?</h1>
+  <p class="subtitle">Ceritain mood kamu sekarang, kami cariin film atau series yang paling pas buat malam ini.</p>
 </header>
 
 <!-- FORM -->
@@ -518,49 +518,49 @@
   <div class="form-card">
 
     <div class="field-group">
-      <span class="field-label">What's your mood right now?</span>
+      <span class="field-label">Lagi mood apa sekarang?</span>
       <div class="mood-grid" id="moodGrid">
-        <div class="mood-pill" data-value="happy">Happy</div>
-        <div class="mood-pill" data-value="sad">Sad</div>
-        <div class="mood-pill" data-value="excited">Excited</div>
-        <div class="mood-pill" data-value="relaxed">Relaxed</div>
-        <div class="mood-pill" data-value="bored">Bored</div>
-        <div class="mood-pill" data-value="romantic">Romantic</div>
-        <div class="mood-pill" data-value="anxious">Anxious</div>
-        <div class="mood-pill" data-value="adventurous">Adventurous</div>
+        <div class="mood-pill" data-value="happy">Senang</div>
+        <div class="mood-pill" data-value="sad">Sedih</div>
+        <div class="mood-pill" data-value="excited">Semangat</div>
+        <div class="mood-pill" data-value="relaxed">Santai</div>
+        <div class="mood-pill" data-value="bored">Bosan</div>
+        <div class="mood-pill" data-value="romantic">Romantis</div>
+        <div class="mood-pill" data-value="anxious">Cemas</div>
+        <div class="mood-pill" data-value="adventurous">Petualang</div>
       </div>
     </div>
 
     <div class="field-group">
-      <span class="field-label">Preferred Genres (pick multiple)</span>
+      <span class="field-label">Genre Favorit (boleh pilih lebih dari satu)</span>
       <div class="genre-grid" id="genreGrid">
-        <div class="genre-pill" data-value="Action">Action</div>
-        <div class="genre-pill" data-value="Comedy">Comedy</div>
+        <div class="genre-pill" data-value="Action">Aksi</div>
+        <div class="genre-pill" data-value="Comedy">Komedi</div>
         <div class="genre-pill" data-value="Drama">Drama</div>
-        <div class="genre-pill" data-value="Horror">Horror</div>
+        <div class="genre-pill" data-value="Horror">Horor</div>
         <div class="genre-pill" data-value="Sci-Fi">Sci-Fi</div>
-        <div class="genre-pill" data-value="Romance">Romance</div>
+        <div class="genre-pill" data-value="Romance">Romansa</div>
         <div class="genre-pill" data-value="Thriller">Thriller</div>
-        <div class="genre-pill" data-value="Animation">Animation</div>
-        <div class="genre-pill" data-value="Documentary">Documentary</div>
-        <div class="genre-pill" data-value="Fantasy">Fantasy</div>
-        <div class="genre-pill" data-value="Mystery">Mystery</div>
-        <div class="genre-pill" data-value="Crime">Crime</div>
+        <div class="genre-pill" data-value="Animation">Animasi</div>
+        <div class="genre-pill" data-value="Documentary">Dokumenter</div>
+        <div class="genre-pill" data-value="Fantasy">Fantasi</div>
+        <div class="genre-pill" data-value="Mystery">Misteri</div>
+        <div class="genre-pill" data-value="Crime">Kriminal</div>
       </div>
     </div>
 
     <div class="field-group">
-      <span class="field-label">Movie or Series?</span>
+      <span class="field-label">Film atau Series?</span>
       <div class="type-toggle" id="typeToggle">
-        <div class="type-btn active" data-value="both">Movie And Series</div>
-        <div class="type-btn" data-value="movie">Movie Only</div>
-        <div class="type-btn" data-value="series">Series Only</div>
+        <div class="type-btn active" data-value="both">Keduanya</div>
+        <div class="type-btn" data-value="movie">Film Saja</div>
+        <div class="type-btn" data-value="series">Series Saja</div>
       </div>
     </div>
 
     <button class="cta-btn" id="findBtn" onclick="findRecommendations()">
       <span class="btn-shimmer"></span>
-      FIND MY WATCH TONIGHT
+      CARIKAN TONTONAN MALAM INI
     </button>
   </div>
 </section>
@@ -568,7 +568,7 @@
 <!-- LOADER -->
 <div id="loader">
   <span class="loader-clapboard">🎬</span>
-  <p class="loader-text">Curating your perfect watchlist<span class="loader-dots"></span></p>
+  <p class="loader-text">Lagi nyariin tontonan terbaik buat kamu<span class="loader-dots"></span></p>
 </div>
 
 <!-- ERROR -->
@@ -577,8 +577,8 @@
 <!-- RESULTS -->
 <section id="results">
   <div class="results-header">
-    <div class="results-title">YOUR <span>PICKS</span> TONIGHT</div>
-    <button class="reset-btn" onclick="resetForm()">← Try Again</button>
+    <div class="results-title">REKOMENDASI <span>MALAM INI</span></div>
+    <button class="reset-btn" onclick="resetForm()">Cari Lagi</button>
   </div>
   <div class="movie-grid" id="movieGrid"></div>
 </section>
@@ -615,14 +615,14 @@
   };
 
   const moodReasons = {
-    happy: 'Matches your upbeat, feel-good energy right now.',
-    sad: 'A meaningful story to channel your emotions.',
-    excited: 'High-energy pick to match your vibe.',
-    relaxed: 'Perfect for a chill, no-stress evening.',
-    bored: 'Gripping enough to pull you off the edge of boredom.',
-    romantic: 'Sets the right mood for a romantic night.',
-    anxious: 'Lets you redirect that nervous energy into the screen.',
-    adventurous: 'Feeds your wanderlust from the couch.',
+    happy: 'Cocok banget sama energi positif kamu sekarang.',
+    sad: 'Cerita yang menyentuh buat menemani perasaanmu.',
+    excited: 'Penuh energi, pas banget sama semangat kamu malam ini.',
+    relaxed: 'Pilihan santai, ideal buat rebahan tanpa banyak pikiran.',
+    bored: 'Dijamin bikin kamu lupa kalau tadi bosan.',
+    romantic: 'Set suasana yang tepat buat malam yang romantis.',
+    anxious: 'Alihkan rasa cemasmu ke layar, dijamin seru.',
+    adventurous: 'Puaskan jiwa petualangmu dari sofa rumah.',
   };
 
   // Pill interactions
@@ -656,7 +656,7 @@
 
   async function findRecommendations() {
     if (!selectedMood) {
-      alert('Please select your mood first!');
+      alert('Pilih mood kamu dulu ya!');
       return;
     }
 
@@ -684,17 +684,28 @@
       let allResults = [];
 
       for (const type of types) {
-        const url = `https://api.themoviedb.org/3/discover/${type}?api_key=${TMDB_KEY}&with_genres=${genreStr}&sort_by=vote_average.desc&vote_count.gte=200&page=1&language=en-US`;
-        const res = await fetch(url);
-        const data = await res.json();
-        if (data.results) {
-          const tagged = data.results.slice(0, 6).map(item => ({ ...item, mediaType: type }));
-          allResults = allResults.concat(tagged);
+        // Fetch 2 pages per type to get enough results (20 per page = 40 items per type)
+        const fetchPromises = [1, 2].map(page =>
+          fetch(`https://api.themoviedb.org/3/discover/${type}?api_key=${TMDB_KEY}&with_genres=${genreStr}&sort_by=vote_average.desc&vote_count.gte=200&page=${page}&language=en-US`)
+            .then(r => r.json())
+        );
+        const pages = await Promise.all(fetchPromises);
+        for (const data of pages) {
+          if (data.results) {
+            const tagged = data.results.map(item => ({ ...item, mediaType: type }));
+            allResults = allResults.concat(tagged);
+          }
         }
       }
 
-      // Shuffle + pick top 6
-      allResults = allResults.sort(() => Math.random() - 0.5).slice(0, 6);
+      // Deduplicate by id, shuffle, pick top 20
+      const seen = new Set();
+      allResults = allResults.filter(item => {
+        if (seen.has(item.id)) return false;
+        seen.add(item.id);
+        return true;
+      });
+      allResults = allResults.sort(() => Math.random() - 0.5).slice(0, 20);
 
       if (allResults.length === 0) throw new Error('No results found');
 
@@ -705,9 +716,9 @@
       errEl.style.display = 'block';
       errEl.innerHTML = `
         <div style="font-size:36px;margin-bottom:12px">😵</div>
-        <p style="margin-bottom:8px">Couldn't load recommendations.</p>
-        <p style="font-size:12px;opacity:0.6">Make sure your TMDB API key is set in the code, or check your internet connection.</p>
-        <button onclick="resetForm()" style="margin-top:16px;background:transparent;border:1px solid #ff6b6b;color:#ff6b6b;padding:10px 20px;border-radius:20px;font-family:'DM Sans',sans-serif;cursor:pointer;font-size:13px;">← Try Again</button>
+        <p style="margin-bottom:8px">Gagal memuat rekomendasi.</p>
+        <p style="font-size:12px;opacity:0.6">Pastikan TMDB API key sudah diisi dengan benar, atau cek koneksi internetmu.</p>
+        <button onclick="resetForm()" style="margin-top:16px;background:transparent;border:1px solid #ff6b6b;color:#ff6b6b;padding:10px 20px;border-radius:20px;font-family:'DM Sans',sans-serif;cursor:pointer;font-size:13px;">← Coba Lagi</button>
       `;
       btn.disabled = false;
     }
@@ -719,19 +730,19 @@
     const grid = document.getElementById('movieGrid');
     grid.innerHTML = '';
 
-    const whyText = moodReasons[selectedMood] || 'A great pick for tonight.';
+    const whyText = moodReasons[selectedMood] || 'Pilihan yang pas buat malam ini.';
 
     items.forEach((item, i) => {
       const title = item.title || item.name || 'Unknown';
       const year = (item.release_date || item.first_air_date || '').slice(0, 4);
       const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
-      const overview = item.overview || 'No description available.';
+      const overview = item.overview || 'Deskripsi tidak tersedia.';
       const poster = item.poster_path
         ? `<img class="card-poster" src="https://image.tmdb.org/t/p/w500${item.poster_path}" alt="${title}" loading="lazy" />`
         : `<div class="card-poster-placeholder">🎬</div>`;
 
       const typeLabel = item.mediaType === 'movie'
-        ? '<span class="card-type type-movie">Movie</span>'
+        ? '<span class="card-type type-movie">Film</span>'
         : '<span class="card-type type-series">Series</span>';
 
       const genreNames = (item.genre_ids || []).map(id => {
@@ -755,7 +766,7 @@
           <div class="card-genres">${genreTags}</div>
           <p class="card-overview">${overview}</p>
           <div class="card-why">
-            <div class="card-why-label">Why tonight?</div>
+            <div class="card-why-label">Kenapa malam ini?</div>
             <div class="card-why-text">${whyText}</div>
           </div>
         </div>
