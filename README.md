@@ -12,7 +12,7 @@
 
 ## ✨ About
 
-**CineMatch** is a single-page web app that recommends movies and TV series based on your current mood and preferred genres. No sign-up, no clutter just pick your vibe and get your watchlist for tonight.
+**CineMatch** is a single page web app that recommends movies and TV series based on your current mood and preferred genres. No sign up, no clutter just pick your vibe and get your watchlist for tonight.
 
 Built as a pure **HTML/CSS/JS** project with zero dependencies, fully responsive for both desktop and mobile.
 
